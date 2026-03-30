@@ -16,6 +16,11 @@ app.use(cors());
 app.use(express.json()); // Parses incoming JSON payloads
 app.use(express.urlencoded({ extended: true }));
 
+// Health check route (so Render and default browsers don't show "Cannot GET /")
+app.get('/', (req, res) => {
+  res.status(200).json({ status: 'VerseSnap API is running correctly!' });
+});
+
 // Central API Router
 app.use('/api', routes);
 
