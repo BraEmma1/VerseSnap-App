@@ -20,7 +20,7 @@ export const runOCR = async (imagePath) => {
   
   try {
     // 1. Preprocess the image using sharp for optimal OCR accuracy
-    await sharp(imagePath)
+    await sharp(imagePath, { failOn: 'none' })
       .resize({ width: 2000, withoutEnlargement: true }) // Scale down huge images to speed up OCR
       .grayscale() // Convert to grayscale to neutralize colored background noise
       .normalize() // Stretch contrast to make text pop
