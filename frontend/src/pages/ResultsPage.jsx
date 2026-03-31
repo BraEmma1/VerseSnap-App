@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import CameraCapture from '../components/CameraCapture';
 import ImageUpload from '../components/ImageUpload';
 import VerseDisplay from '../components/VerseDisplay';
@@ -9,8 +9,10 @@ import '../App.css'; // Importing global CSS
 const ResultsPage = () => {
   const { processImage, loading: ocrLoading, error: ocrError, text } = useOCR();
   const { analyzeText, loading: verseLoading, error: verseError, verses, detectedReferences } = useVerse();
+  const [isSilentScan, setIsSilentScan] = useState(false);
 
-  const handleImageInput = async (blob) => {
+  const handleImageInput = async (blob, isAutoScan = false) => {
+    setIsSilentScan(isAutoScan);
     // 1. Process Image via OCR
     const extractedText = await processImage(blob);
     
@@ -32,25 +34,25 @@ const ResultsPage = () => {
 
       <main className="main-content">
         <div className="capture-section">
-          <CameraCapture onCapture={handleImageInput} />
+          <CameraCapture onCapture={handleImageInput} isProcessing={isLoading} />
           <div className="divider">OR</div>
           <ImageUpload onUpload={handleImageInput} />
         </div>
 
-        {isLoading && (
+        {isLoading && !isSilentScan && (
           <div className="loading-state">
             <div className="spinner"></div>
             <p>{ocrLoading ? 'Extracting text from image...' : 'Finding Bible verses...'}</p>
           </div>
         )}
 
-        {isError && (
+        {isError && (!isSilentScan || verseError) && (
           <div className="error-state">
             <p>{ocrError || verseError}</p>
           </div>
         )}
 
-        {text && !isLoading && (
+        {text && !isLoading && !isSilentScan && (
           <div className="ocr-result-section">
             <h3 className="section-title">Extracted Text:</h3>
             <p className="extracted-text">{text}</p>

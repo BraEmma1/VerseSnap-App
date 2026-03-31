@@ -251,3 +251,65 @@ body {
   background: var(--bg-color);
   border-radius: 8px;
 }
+
+/* Scanning UI Additions */
+.webcam-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 500px;
+  overflow: hidden;
+  border-radius: 8px;
+}
+
+.scanning-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: 2px solid var(--primary);
+  border-radius: 8px;
+  pointer-events: none;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding-bottom: 2rem;
+  background: rgba(79, 70, 229, 0.1);
+}
+
+.scanning-overlay.success {
+  border-color: #10b981;
+  background: rgba(16, 185, 129, 0.2);
+}
+
+.scan-line {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: var(--primary);
+  box-shadow: 0 0 10px var(--primary);
+  animation: scan 2s infinite linear;
+}
+
+@keyframes scan {
+  0% { top: 0; }
+  50% { top: calc(100% - 3px); }
+  100% { top: 0; }
+}
+
+.scan-text {
+  background: rgba(0, 0, 0, 0.6);
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 999px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  animation: pulseopacity 1.5s infinite;
+}
+
+@keyframes pulseopacity {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
